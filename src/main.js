@@ -21,21 +21,23 @@ window.onload = async () => {
         // If the same chain id is already registered, it will resolve and not require the user interactions.
         await window.keplr.experimentalSuggestChain({
           // Chain-id of the Osmosis chain.
-          chainId: "osmosis-1",
+          chainId: "qube-devnet-1",
           // The name of the chain to be displayed to the user.
-          chainName: "Osmosis mainnet",
+          chainName: "Qube Devnet",
           // RPC endpoint of the chain. In this case we are using blockapsis, as it's accepts connections from any host currently. No Cors limitations.
-          rpc: "https://rpc-osmosis.blockapsis.com",
+          rpc: "https://cors-anywhere.herokuapp.com/http://46.183.163.240:26657",
           // REST endpoint of the chain.
-          rest: "https://lcd-osmosis.blockapsis.com",
+          rest: "https://cors-anywhere.herokuapp.com/http://46.183.163.240:443",
+          chainSymbolImageUrl: "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmfJEqcjheC56qrs9cpW86RaGUW2xsJrB1suGWoZJScbXc",
           // Staking coin information
           stakeCurrency: {
             // Coin denomination to be displayed to the user.
-            coinDenom: "OSMO",
+            coinDenom: "QUBE",
             // Actual denom (i.e. uatom, uscrt) used by the blockchain.
-            coinMinimalDenom: "uosmo",
+            coinMinimalDenom: "uqube",
             // # of decimal points to convert minimal denomination to user-facing denomination.
             coinDecimals: 6,
+            coinImageUrl: "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmfJEqcjheC56qrs9cpW86RaGUW2xsJrB1suGWoZJScbXc",
             // (Optional) Keplr can show the fiat value of the coin if a coingecko id is provided.
             // You can get id from https://api.coingecko.com/api/v3/coins/list if it is listed.
             // coinGeckoId: ""
@@ -47,7 +49,7 @@ window.onload = async () => {
           bip44: {
             // You can only set the coin type of BIP44.
             // 'Purpose' is fixed to 44.
-            coinType: 118,
+            coinType: 560,
           },
           // Bech32 configuration to show the address to user.
           // This field is the interface of
@@ -60,22 +62,23 @@ window.onload = async () => {
           //   bech32PrefixConsPub: string;
           // }
           bech32Config: {
-            bech32PrefixAccAddr: "osmo",
-            bech32PrefixAccPub: "osmopub",
-            bech32PrefixValAddr: "osmovaloper",
-            bech32PrefixValPub: "osmovaloperpub",
-            bech32PrefixConsAddr: "osmovalcons",
-            bech32PrefixConsPub: "osmovalconspub",
+            bech32PrefixAccAddr: "qube",
+            bech32PrefixAccPub: "qubepub",
+            bech32PrefixValAddr: "qubevaloper",
+            bech32PrefixValPub: "qubevaloperpub",
+            bech32PrefixConsAddr: "qubevalcons",
+            bech32PrefixConsPub: "qubevalconspub",
           },
           // List of all coin/tokens used in this chain.
           currencies: [
             {
               // Coin denomination to be displayed to the user.
-              coinDenom: "OSMO",
+              coinDenom: "QUBE",
               // Actual denom (i.e. uatom, uscrt) used by the blockchain.
-              coinMinimalDenom: "uosmo",
+              coinMinimalDenom: "uqube",
               // # of decimal points to convert minimal denomination to user-facing denomination.
               coinDecimals: 6,
+              coinImageUrl: "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmfJEqcjheC56qrs9cpW86RaGUW2xsJrB1suGWoZJScbXc",
               // (Optional) Keplr can show the fiat value of the coin if a coingecko id is provided.
               // You can get id from https://api.coingecko.com/api/v3/coins/list if it is listed.
               // coinGeckoId: ""
@@ -85,11 +88,12 @@ window.onload = async () => {
           feeCurrencies: [
             {
               // Coin denomination to be displayed to the user.
-              coinDenom: "OSMO",
+              coinDenom: "QUBE",
               // Actual denom (i.e. uosmo, uscrt) used by the blockchain.
-              coinMinimalDenom: "uosmo",
+              coinMinimalDenom: "uqube",
               // # of decimal points to convert minimal denomination to user-facing denomination.
               coinDecimals: 6,
+              coinImageUrl: "https://apricot-grubby-booby-751.mypinata.cloud/ipfs/QmfJEqcjheC56qrs9cpW86RaGUW2xsJrB1suGWoZJScbXc",
               // (Optional) Keplr can show the fiat value of the coin if a coingecko id is provided.
               // You can get id from https://api.coingecko.com/api/v3/coins/list if it is listed.
               // coinGeckoId: ""
@@ -104,12 +108,6 @@ window.onload = async () => {
               },
             },
           ],
-          // (Optional) The number of the coin type.
-          // This field is only used to fetch the address from ENS.
-          // Ideally, it is recommended to be the same with BIP44 path's coin type.
-          // However, some early chains may choose to use the Cosmos Hub BIP44 path of '118'.
-          // So, this is separated to support such chains.
-          coinType: 118,
         });
       } catch {
         alert("Failed to suggest the chain");
@@ -119,7 +117,7 @@ window.onload = async () => {
     }
   }
 
-  const chainId = "osmosis-1";
+  const chainId = "qube-devnet-1";
 
   // You should request Keplr to enable the wallet.
   // This method will ask the user whether or not to allow access if they haven't visited this website.
@@ -143,24 +141,36 @@ document.sendForm.onsubmit = () => {
 
   (async () => {
     // See above.
-    const chainId = "osmosis-1";
+    const chainId = "qube-devnet-1";
     await window.keplr.enable(chainId);
     const offlineSigner = window.getOfflineSigner(chainId);
     const accounts = await offlineSigner.getAccounts();
+    console.log(accounts)
 
+    const network = {
+      url: 'https://cors-anywhere.herokuapp.com/http://46.183.163.240:26657',
+      /*headers: {
+        //'Content-Type': 'application/json',
+        'Access-Control-Allow-Headers':
+        'Accept,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Requested-With',
+        'Access-Control-Methods': 'GET, POST, OPTION',
+        'Access-Control-Allow-Origin': 'http://localhost:8081',
+        'Access-Control-Expose-Headers': 'Content-Length,Content-Range',
+        'Access-Control-Max-Age': '1728000',
+      },*/
+    }
     const client = await SigningStargateClient.connectWithSigner(
-      "https://rpc-osmosis.blockapsis.com",
-      offlineSigner
+      network,
+      offlineSigner,
     );
-
     const amountFinal = {
-      denom: "uosmo",
+      denom: "uqube",
       amount: amount.toString(),
     };
     const fee = {
       amount: [
         {
-          denom: "uosmo",
+          denom: "uqube",
           amount: "5000",
         },
       ],
